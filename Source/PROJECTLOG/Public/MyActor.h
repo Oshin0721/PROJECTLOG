@@ -18,16 +18,15 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 private:
-	FVector2D start;
-	TArray<FVector2D> Path;
+	FVector2D start;     // 현재 좌표
+	int32 evCnt;         // 이벤트 발생 횟수
+	float totDist;       // 누적 거리
 
-	int step();
-	void move();
-	void TriggerEventWithProbability(float Probability);
+	int32 step();        // 0 또는 1 반환
+	void move();         // 이동 로직
+	int32 createEvent(); // 이벤트 발생 여부 리턴 (50%)
+	float distance(FVector2D first, FVector2D second); // 거리 계산
 };
