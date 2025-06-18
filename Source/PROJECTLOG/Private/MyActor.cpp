@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+﻿// Fill out your copyright notice in the Description page of Project Settings.
 
 
 #include "MyActor.h"
@@ -19,6 +19,11 @@ void AMyActor::BeginPlay()
 	
 	UE_LOG(LogTemp, Warning, TEXT("Starting position: (%.0f, %.0f)"), start.X, start.Y);
 	move();
+
+	for (int i = 0; i < Path.Num(); ++i)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Path[%d]: X=%.0f, Y=%.0f"), i, Path[i].X, Path[i].Y);
+	}
 }
 
 // Called every frame
@@ -33,6 +38,19 @@ int AMyActor::step()
 	return FMath::RandRange(0, 1); 
 }
 
+void AMyActor::TriggerEventWithProbability(float Probability)
+{
+	int32 RandomValue = FMath::RandRange(1, 100);
+	if (RandomValue <= Probability)
+	{
+		UE_LOG(LogTemp, Log, TEXT(">> 🎉 Event Triggered!"));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT(">> Event Skipped."));
+	}
+}
+
 void AMyActor::move()
 {
 	for (int i = 0; i < 10; ++i)
@@ -42,8 +60,14 @@ void AMyActor::move()
 
 		start.X += deltaX;
 		start.Y += deltaY;
+		
+		Path.Add(start);
 
-		UE_LOG(LogTemp, Warning, TEXT("Step %d: Moved to position (%.0f, %.0f)"), i + 1, start.X, start.Y);
+		float dist = FVector2D::Distance(FVector2D(0, 0), start);
+
+		UE_LOG(LogTemp, Warning, TEXT("Step %d: Moved to (%.0f, %.0f), Distance from origin: %.2f"), i + 1, start.X, start.Y, dist);
+	
+		TriggerEventWithProbability(25.0f);
 	}
 }
 

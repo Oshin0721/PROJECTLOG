@@ -25,7 +25,9 @@ public:
 
 private:
 	FVector2D start;
+	TArray<FVector2D> Path;
 
 	int step();
 	void move();
+	void TriggerEventWithProbability(float Probability);
 };
